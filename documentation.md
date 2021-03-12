@@ -2,8 +2,13 @@
 
 ## Théorie
 
+  Ces textes présentent le testing de logiciels en général, hors du cadre d'une application Rails.
+
+- [What is Software Testing?](https://www.guru99.com/software-testing-introduction-importance.html)
+- [IBM : Software testing](https://www.ibm.com/topics/software-testing)
 - [Self testing code](https://martinfowler.com/bliki/SelfTestingCode.html)
 - [Practical test pyramid](https://martinfowler.com/articles/practical-test-pyramid.html)
+- [Software testing at Facebook and Google](https://screenster.io/software-testing-facebook-google/) (par pure curiosité)
 
 ## Librairies
 
@@ -20,7 +25,7 @@
 
 - [Rails guide : Testing Rails Applications](https://guides.rubyonrails.org/testing.html)
 
-  Guide officiel de Rails sur le testing. Utilise la librairie de test de Rails par défaut, Minitest (et non Rspec). Rspec est le standard de la communauté, voire [cet article](https://www.codewithjason.com/test-framework-learn-rspec-minitest/).
+  Guide officiel de Rails sur le testing. Utilise la librairie de test de Rails par défaut, Minitest (et non Rspec). Rspec est le standard de la communauté, voir [cet article](https://www.codewithjason.com/test-framework-learn-rspec-minitest/).
 
 - [Learn.co : Ruby Rails Testing](https://learn.co/lessons/ruby-rails-testing)
 
