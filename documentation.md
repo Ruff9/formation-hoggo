@@ -9,6 +9,7 @@
 - [Self testing code](https://martinfowler.com/bliki/SelfTestingCode.html)
 - [Practical test pyramid](https://martinfowler.com/articles/practical-test-pyramid.html)
 - [Software testing at Facebook and Google](https://screenster.io/software-testing-facebook-google/) (par pure curiosité)
+- [How to Write Testable Code and Why it Matters](https://www.toptal.com/qa/how-to-write-testable-code-and-why-it-matters)
 
 ## Librairies
 

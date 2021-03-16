@@ -1,0 +1,394 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Formation Hoggo</title>
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/black.css" id="theme">
+		<link rel="stylesheet" href="css/custom.css">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/monokai.css" id="highlight-theme">
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<h2>Formation testing</h2>
+					<div>17/03/2021</div>
+
+					<aside class="notes">
+						Présentation du testing en général<br>
+						les principes appliqués à une application Rails <br>
+						Présentation des librairies les plus utilisées <br>
+					</aside>
+				</section>
+
+				<section>
+					<h4>Rémy Maucourt</h4>
+
+					<ul>
+						<li>6 ans de développement Ruby / JS</li>
+						<li>Devops : Docker, Kubernetes, GCP, CI/CD</li>
+						<li>Agiliste (Extreme programming)</li>
+					</ul>
+				</section>
+
+				<section>
+					<h3>Pourquoi tester ?</h3>
+
+					<aside class="notes">
+						Facile de croire que ça ne sert à rien
+					</aside>
+				</section>
+
+				<section>
+					<div class='flex-container'>
+						<div>Plus facile de </div>
+						<ul>
+							<li>débugger</li>
+							<li>modifier</li>
+							<li>refactorer</li>
+						</ul>
+					</div><br>
+
+					<div class='flex-container'>Objectifs : stabilité, maintenabilité, scalabilité </div>
+
+					<aside class="notes">
+						image du filet de sécurité<br>
+						Réduire la souffrance du code qui plante / sérénité<br>
+						Les trois objectifs sont le même ?
+					</aside>
+				</section>
+
+				<section>
+					<h4>Base de l'intégration continue</h4>
+
+					<ul>
+						<li>CI : valider automatiquement la qualité du code</li>
+						<li>Autres outils : linter, couverture de test </li>
+						<li>Indispensable pour organiser les grandes équipes</li>
+					</ul>
+
+					<aside class="notes">
+						Construction de process de dev complexes, avec des centaines de dev<br>
+						Pratique standard à une certaine échelle<br>
+						couverture de test, ex : codacy<br>
+					</aside>
+				</section>
+
+				<section>
+					<h4>Martin Fowler : "Self-testing code"</h4>
+					<div>=> Système de debugging automatisé sur mesure</div>
+
+					<aside class="notes">
+						Si je suis là, c'est que vous êtes convaincus.
+					</aside>
+				</section>
+
+				<section>
+					<h3>Comment tester ?</h3>
+				</section>
+
+				<section>
+					<h3>Test pyramid</h3>
+					<img data-src="public/images/test_pyramid.png"/>
+
+					<aside class="notes">
+						Que faut-il pour etre serein?
+						plus haut niveau : plus lent mais plus de valeur de débuggage
+					</aside>
+				</section>
+
+				<section>
+					<section>
+						<ul>
+							<li>Test unitaire : teste une fonction / méthode</li>
+							<li>Test d'intégration : teste l'intégration de plusieurs fonctions</li>
+						</ul>
+					</section>
+				</section>
+
+				<section>
+					<h4 class='centered'>Structure d'un test</h4>
+					<div class='flex-container-v'>
+						<div class='flex-item'>Setup</div>
+						<div class='flex-item'>Execution</div>
+						<div class='flex-item'>Expectation</div>
+					</div>
+
+					<aside class="notes">
+					</aside>
+				</section>
+
+				<section>
+					<h3>Tester une application Rails</h3>
+
+					<aside class="notes">
+						entrer dans la pratique<br>
+						outillage standard, le plus utilisé
+					</aside>
+				</section>
+
+				<section>
+					<section>
+						<h4>Framework de test : RSpec</h4>
+
+						<pre><code class="ruby" data-trim data-noescape>
+							describe Person do
+							  describe "#full_name" do
+							    it "returns the first and last names concatenated" do
+							      person = Person.new(first_name: "John", last_name: "Murphy")
+
+							      expect(person.full_name).to eq "John Murphy"
+							    end
+							  end
+							end
+						</code></pre>
+
+						<aside class="notes">
+						</aside>
+					</section>
+
+					<section>
+						<h4>Comparaison avec Minitest</h4>
+
+						<pre><code class="ruby" data-trim data-noescape>
+							class TestPerson < Minitest::Test
+							  def setup
+							    @person = Person.new(first_name: "John", last_name: "Murphy")
+							  end
+
+							  def test_full_name
+							    assert_equal @person.full_name, "John Murphy"
+							  end
+							end
+						</code></pre>
+
+						<aside class="notes">
+							auparavant TestUnit, défaut de Ruby et Rails
+						</aside>
+					</section>
+
+					<section>
+						<img data-src="public/images/poll-rspec-minitest.png"/>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h4>Tests de modèle : Shoulda Matchers</h4>
+
+						<pre><code data-trim data-noescape class="ruby">
+							RSpec.describe User, type: :model do
+							  it { should belong_to(:organisation) }
+
+							  it { should validate_presence_of(:name) }
+							  it { should validate_presence_of(:email) }
+
+							  it { should validate_uniqueness_of(:email) }
+							end
+						</code></pre>
+
+						<aside class="notes">
+						</aside>
+					</section>
+				</section>
+
+				<section>
+					<h4>Tests de feature : Capybara</h4>
+
+					<pre><code class="ruby" data-trim data-noescape>
+						RSpec.feature 'Users', type: :feature do
+						  describe 'Sign up' do
+						    it 'should create a user and an organisation' do
+						      visit new_user_registration_path
+
+						      fill_in 'Organisation', with: 'Coca-Cola'
+						      fill_in 'Name', with: 'John Murphy'
+						      fill_in 'Email', with: 'john@coca-cola.com'
+						      fill_in 'Password', with: 'password'
+						      fill_in 'Password confirmation', with: 'password'
+
+						      expect { click_button 'Sign up' }.to change { User.count }.by(1)
+						                                       .and change { Organisation.count }.by(1)
+						    end
+						  end
+						end
+					</code></pre>
+
+					<aside class="notes">
+						valeur de documentation <br>
+						test d'intégration :<br>
+							le layout charge /
+							les champs de formulaire existent /
+							la feature de base fonctionne /
+							les validations passent
+					</aside>
+				</section>
+
+				<section>
+					<section>
+						<h4>Tests de requête</h4>
+
+						<pre><code class="ruby" data-trim data-noescape>
+							RSpec.describe "Users", type: :request do
+							  describe "GET users#index" do
+							    it "gets all users" do
+							      2.times { create(:user) }
+
+							      get '/api/v1/users'
+
+							      expect(response).to have_http_status(200)
+							      json = JSON.parse(response.body)
+							      expect(json[:users].length).to eq 2
+							    end
+							  end
+							end
+						</code></pre>
+
+						<aside class="notes">
+							tests d'intégration quand on n'a pas d'interface
+							pas besoin de librairie : inclu dans RSpec
+						</aside>
+					</section>
+
+					<section>
+						<pre><code class="ruby" data-trim data-noescape>
+							RSpec.describe "Users", type: :request do
+							  describe "POST users#create" do
+							    it 'create user and organisation' do
+							      user_params = { user: {
+							        name: 'John Murphy',
+							        organisation: 'Coca-Cola'
+							        password: 'password',
+							        email: 'john@coca-cola.com'
+							      }}
+
+							      expect do
+							        post '/api/v1/users', params: user_params.to_json, headers: headers
+							      end.to change { User.count }.by(1)
+							         .and change { Organisation.count }.by(1)
+
+							      expect(response).to have_http_status(201)
+							    end
+							  end
+							end
+						</code></pre>
+					</section>
+				</section>
+
+				<section>
+					<h4>Création d'objets : FactoryBot</h4>
+
+					<pre><code class="ruby" data-trim data-noescape>
+						FactoryBot.define do
+						  factory :user do
+						    name { 'John' }
+						    sequence(:email) { |n| "user#{n}@example.com" }
+						    password { 'password' }
+						    password_confirmation { 'password' }
+
+						    association :organisation
+						  end
+						end
+
+						user = create(:user, email: 'john.example.com')
+						user = build(:user, email: 'john.example.com')
+					</code></pre>
+
+					<aside class="notes">
+					</aside>
+				</section>
+
+				<section>
+					<h4>Setup</h4>
+
+					<pre><code class="ruby" data-trim data-noescape>
+						group :development, :test do
+						  gem 'rspec-rails'
+						  gem 'shoulda-matchers'
+						  gem 'capybara'
+						  gem 'factory_bot_rails'
+						end
+					</code></pre>
+
+					<aside class="notes">
+						avec ça, on teste tout<br>
+						plus de setup que ça<br>
+						Navigateur headless de capybara<br>
+					</aside>
+				</section>
+
+				<section>
+					<h3>Maintenabilité / scalabilité</h3>
+
+					<aside class="notes">
+						pas de l'appli, mais de la suite de test.
+						PB : lenteur,  instabilité
+					</aside>
+				</section>
+
+				<section>
+					<h4>Tester en isolation</h4>
+
+					<ul>
+						<li>Chaque test doit être indépendant.</li>
+						<li>Suite en ordre aléatoire : défaut de RSpec</li>
+						<li>Pas de contact avec une API extérieure (stubs/mocks)</li>
+					</ul>
+
+					<aside class="notes">
+					</aside>
+				</section>
+
+				<section>
+					<ul>
+						<li>Limiter l'usage de la base de données aux tests d'intégration (feature/request)</li>
+						<li>Ne tester que le nécessaire (le plus complexe)</li>
+					</ul>
+
+					<aside class="notes">
+						ne pas tester les librairies exterieures
+					</aside>
+				</section>
+
+				<section>
+					<div class='flex-container'>
+						<div>Un bon test doit être :</div>
+						<ul>
+							<li>facile à écrire</li>
+							<li>facile à lire</li>
+							<li>fiable</li>
+							<li>rapide</li>
+						</ul>
+					</div>
+				</section>
+
+				<section>
+					<h3>Test Driven Development</h3>
+				</section>
+			</div>
+		</div>
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+			});
+		</script>
+	</body>
+</html>
