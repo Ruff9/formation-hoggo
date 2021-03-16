@@ -81,6 +81,7 @@
 						Construction de process de dev complexes, avec des centaines de dev<br>
 						Pratique standard à une certaine échelle<br>
 						couverture de test, ex : codacy<br>
+						préalable au déploiement continu (CD)
 					</aside>
 				</section>
 
@@ -108,12 +109,15 @@
 				</section>
 
 				<section>
-					<section>
-						<ul>
-							<li>Test unitaire : teste une fonction / méthode</li>
-							<li>Test d'intégration : teste l'intégration de plusieurs fonctions</li>
-						</ul>
-					</section>
+					<ul>
+						<li>Test unitaire : teste une fonction / méthode</li>
+						<li>Test d'intégration : teste l'intégration de plusieurs fonctions</li>
+					</ul>
+
+					<aside class="notes">
+						une bonne couverture a besoin des deux : quelques tests d'intégration pour
+						l'ensemble de la feature, et des tests unitaires pour tous les points complexes.
+					</aside>
 				</section>
 
 				<section>
@@ -125,6 +129,7 @@
 					</div>
 
 					<aside class="notes">
+						tous les tests présentent ces trois parties
 					</aside>
 				</section>
 
@@ -175,12 +180,17 @@
 
 						<aside class="notes">
 							auparavant TestUnit, défaut de Ruby et Rails
+							intégré à Ruby
 							syntaxe : setup, test_ , assert_equal
 						</aside>
 					</section>
 
 					<section>
 						<img data-src="public/images/poll-rspec-minitest.png"/>
+
+						<aside class="notes">
+							Jamais vu une équipe qui n'utilisait pas RSpec.
+						</aside>
 					</section>
 				</section>
 
@@ -312,7 +322,7 @@
 					</code></pre>
 
 					<aside class="notes">
-						créer un objet valide, avec les bonnes données
+						créer facilement un objet valide, avec les bonnes données
 					</aside>
 				</section>
 
@@ -332,6 +342,7 @@
 						avec ça, on teste tout<br>
 						plus de setup que ça<br>
 						Navigateur headless de capybara<br>
+						d'autres librairies/plugin peuvent etre nécessaires
 					</aside>
 				</section>
 
@@ -383,6 +394,35 @@
 
 				<section>
 					<h3>Test Driven Development</h3>
+
+					<aside class="notes">
+						Meilleure méthode pour appliquer tous ces principes<br>
+						Pas plus compliqué, une fois bien en main plus simple<br>
+						exercices de codes en ligne, katas (codewars)
+					</aside>
+				</section>
+
+				<section>
+					<h4>Bonus setup : Guard</h4>
+
+					<pre><code class="ruby" data-trim data-noescape>
+						group :development do
+							gem 'guard-rspec', require: false
+						end
+					</code></pre>
+
+					<aside class="notes">
+						relance les tests quand un fichier est sauveguardé<br>
+						outil pour le TDD, et pour le développement en général
+					</aside>
+				</section>
+				
+				<section>
+					<h3>Questions ?</h3>
+
+					<aside class="notes">
+						Juste un aperçu rapide, beaucoup de choses à creuser
+					</aside>
 				</section>
 			</div>
 		</div>
